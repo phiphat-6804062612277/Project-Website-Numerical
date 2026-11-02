@@ -3,7 +3,7 @@ import './globals.css';
 import 'katex/dist/katex.min.css';
 
 export const metadata: Metadata = {
-  title: 'NumeriCraft - Matrix & Linear System Solver',
+  title: 'Linear System - Matrix Solver',
   description: 'ระบบคำนวณและแสดงวิธีทำสมการเชิงเส้นทีละสเต็ป (Step-by-Step Visualizer) พัฒนาด้วยสถาปัตยกรรม OOP',
 };
 
@@ -13,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="th" className="dark">
-      <body className="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-indigo-500 selection:text-white">
+    <html lang="th" className="light">
+      <body className="bg-slate-50 text-slate-900 min-h-screen antialiased selection:bg-indigo-600 selection:text-white">
         {children}
       </body>
     </html>

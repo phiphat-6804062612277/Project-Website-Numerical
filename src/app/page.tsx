@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useTransition } from 'react';
+import React, { useState, useEffect } from 'react';
 import { KaTeXMath } from '@/components/KaTeXMath';
-import { SolutionType, SolutionResult, StepLog } from '@/lib/oop/types';
+import { SolutionType, SolutionResult } from '@/lib/oop/types';
 import { LinearSystemProblem } from '@/lib/oop/LinearSystemProblem';
 import { SolverFactory } from '@/lib/oop/SolverFactory';
 import { MatrixUtils } from '@/lib/oop/MatrixUtils';
@@ -83,7 +83,6 @@ export default function MatrixSolverPage() {
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [historyList, setHistoryList] = useState<any[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(false);
-  const [isPending, startTransition] = useTransition();
 
   // Run initial calculation on page load
   useEffect(() => {
@@ -110,7 +109,6 @@ export default function MatrixSolverPage() {
   // Execute solver using OOP classes
   const executeSolve = async (A: number[][], b: number[], method: SolutionType) => {
     try {
-      // Client-side instant OOP execution
       const problem = new LinearSystemProblem(A, b);
       const solver = SolverFactory.createSolver(problem, method);
       const solution = solver.solve();
@@ -236,24 +234,24 @@ export default function MatrixSolverPage() {
   const isSingular = Math.abs(detPreview) < 1e-9;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans">
       
       {/* Top Navbar */}
-      <header className="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <header className="border-b border-slate-200/90 bg-white/80 backdrop-blur sticky top-0 z-40 shadow-xs">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
           
           <div className="flex items-center">
-            <h1 className="text-xl font-bold text-white tracking-wide">Linear System</h1>
+            <h1 className="text-xl font-bold text-slate-900 tracking-tight">Linear System</h1>
           </div>
 
           {/* Tab Navigation */}
-          <nav className="flex p-1 bg-slate-950 rounded-xl border border-slate-800 text-xs font-medium">
+          <nav className="flex p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-medium">
             <button
               onClick={() => setActiveTab('solver')}
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg transition ${
                 activeTab === 'solver'
-                  ? 'bg-indigo-600 text-white shadow'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                  ? 'bg-white text-indigo-600 shadow-sm font-semibold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
               <Calculator className="w-3.5 h-3.5" />
@@ -263,8 +261,8 @@ export default function MatrixSolverPage() {
               onClick={() => setActiveTab('history')}
               className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition ${
                 activeTab === 'history'
-                  ? 'bg-indigo-600 text-white shadow'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                  ? 'bg-white text-indigo-600 shadow-sm font-semibold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
               <History className="w-3.5 h-3.5" />
@@ -285,30 +283,30 @@ export default function MatrixSolverPage() {
           <div className="space-y-6">
 
             {/* Input Card */}
-            <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl backdrop-blur space-y-6">
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-sm space-y-6">
               
               {/* Controls bar */}
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-5">
                 <div className="space-y-1">
-                  <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                  <h2 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-indigo-600"></span>
                     <span>กำหนดขนาดและป้อนค่าระบบสมการ <KaTeXMath math="Ax = b" /></span>
                   </h2>
-                  <p className="text-xs text-slate-400">เลือกขนาดมิติ ป้อนค่า หรือเลือกโจทย์ตัวอย่างมาตรฐาน</p>
+                  <p className="text-xs text-slate-500">เลือกขนาดมิติ ป้อนค่า หรือเลือกโจทย์ตัวอย่างมาตรฐาน</p>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2.5">
                   {/* Dimension selector */}
-                  <div className="inline-flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
-                    <span className="text-slate-400 px-2 font-medium">มิติ:</span>
+                  <div className="inline-flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+                    <span className="text-slate-500 px-2 font-medium">มิติ:</span>
                     {[2, 3, 4].map(dim => (
                       <button
                         key={dim}
                         onClick={() => handleDimensionChange(dim)}
                         className={`px-3 py-1 rounded-lg font-mono transition ${
                           dimension === dim
-                            ? 'bg-indigo-600 text-white font-semibold shadow'
-                            : 'text-slate-400 hover:text-white'
+                            ? 'bg-indigo-600 text-white font-semibold shadow-xs'
+                            : 'text-slate-600 hover:text-slate-900'
                         }`}
                       >
                         {dim}×{dim}
@@ -320,7 +318,7 @@ export default function MatrixSolverPage() {
                   <select
                     onChange={(e) => handlePresetSelect(e.target.value)}
                     defaultValue="default3"
-                    className="bg-slate-950 border border-slate-800 text-xs text-slate-200 rounded-xl px-3 py-1.5 focus:outline-none focus:border-indigo-500 font-medium"
+                    className="bg-white border border-slate-200 text-xs text-slate-700 rounded-xl px-3 py-1.5 focus:outline-none focus:border-indigo-500 font-medium shadow-2xs"
                   >
                     {Object.entries(PRESETS).map(([key, p]) => (
                       <option key={key} value={key}>
@@ -332,18 +330,18 @@ export default function MatrixSolverPage() {
                   {/* Fast Action Buttons */}
                   <button
                     onClick={handleRandomize}
-                    className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs flex items-center gap-1 transition"
+                    className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs flex items-center gap-1 transition shadow-2xs"
                     title="สุ่มตัวเลข"
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                    <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
                     <span>สุ่มโจทย์</span>
                   </button>
                   <button
                     onClick={handleClear}
-                    className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs flex items-center gap-1 transition"
+                    className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs flex items-center gap-1 transition shadow-2xs"
                     title="ล้างค่าเป็นเมทริกซ์เอกลักษณ์"
                   >
-                    <Trash2 className="w-3.5 h-3.5 text-slate-400" />
+                    <Trash2 className="w-3.5 h-3.5 text-slate-500" />
                     <span>ล้างค่า</span>
                   </button>
                 </div>
@@ -353,15 +351,15 @@ export default function MatrixSolverPage() {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
                 {/* Matrix Inputs */}
-                <div className="lg:col-span-7 bg-slate-950/80 border border-slate-800/90 rounded-2xl p-5 shadow-inner">
-                  <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-2.5">
-                    <span className="text-[11px] font-semibold text-indigo-300 font-mono tracking-wider uppercase">
+                <div className="lg:col-span-7 bg-slate-50 border border-slate-200 rounded-2xl p-5 shadow-2xs">
+                  <div className="flex items-center justify-between mb-4 border-b border-slate-200 pb-2.5">
+                    <span className="text-[11px] font-semibold text-slate-500 font-mono tracking-wider uppercase">
                       [ สัมประสิทธิ์ A ] × [ ตัวแปร x ] = [ เวกเตอร์ b ]
                     </span>
                     <span className={`text-[11px] font-mono px-2 py-0.5 rounded border ${
                       isSingular 
-                        ? 'bg-rose-950/80 border-rose-800 text-rose-300 font-semibold' 
-                        : 'bg-slate-900 border-slate-800 text-slate-300'
+                        ? 'bg-rose-50 border-rose-200 text-rose-700 font-semibold' 
+                        : 'bg-white border-slate-200 text-slate-700 shadow-2xs'
                     }`}>
                       {isSingular ? 'det(A) = 0 (Singular)' : `det(A) = ${detPreview.toFixed(2)}`}
                     </span>
@@ -378,9 +376,9 @@ export default function MatrixSolverPage() {
                               step="any"
                               value={val}
                               onChange={(e) => handleCellChange(r, c, e.target.value)}
-                              className="w-14 h-9 bg-slate-900 border border-slate-700/80 rounded-lg text-center font-mono text-xs text-white focus:outline-none focus:border-indigo-500"
+                              className="w-14 h-9 bg-white border border-slate-300 rounded-lg text-center font-mono text-xs text-slate-800 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 shadow-2xs"
                             />
-                            <span className="text-xs text-slate-400 font-mono">
+                            <span className="text-xs text-slate-500 font-mono">
                               x{c + 1}{c < dimension - 1 ? ' +' : ''}
                             </span>
                           </React.Fragment>
@@ -391,7 +389,7 @@ export default function MatrixSolverPage() {
                           step="any"
                           value={vectorB[r] ?? 0}
                           onChange={(e) => handleVectorChange(r, e.target.value)}
-                          className="w-14 h-9 bg-indigo-950/70 border border-indigo-600/80 rounded-lg text-center font-mono text-xs text-cyan-300 font-bold focus:outline-none focus:border-cyan-400"
+                          className="w-14 h-9 bg-indigo-50 border border-indigo-300 rounded-lg text-center font-mono text-xs text-indigo-700 font-bold focus:outline-none focus:border-indigo-600 shadow-2xs"
                         />
                       </div>
                     ))}
@@ -400,8 +398,8 @@ export default function MatrixSolverPage() {
 
                 {/* Method Options & Solve Button */}
                 <div className="lg:col-span-5 space-y-4">
-                  <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-4 space-y-3">
-                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3 shadow-2xs">
+                    <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
                       เลือกวิธีคำนวณ (Numerical Method):
                     </label>
 
@@ -410,8 +408,8 @@ export default function MatrixSolverPage() {
                         onClick={() => setSelectedMethod('GAUSS_JORDAN')}
                         className={`flex items-start p-3 rounded-xl border cursor-pointer transition ${
                           selectedMethod === 'GAUSS_JORDAN'
-                            ? 'border-indigo-500/60 bg-indigo-950/30'
-                            : 'border-slate-800 hover:border-slate-700 bg-slate-900/40'
+                            ? 'border-indigo-500 bg-white ring-1 ring-indigo-500 shadow-xs'
+                            : 'border-slate-200 bg-white hover:border-slate-300'
                         }`}
                       >
                         <input
@@ -423,8 +421,8 @@ export default function MatrixSolverPage() {
                           className="w-4 h-4 mt-0.5 text-indigo-600 focus:ring-indigo-500"
                         />
                         <div className="ml-3">
-                          <span className="text-xs font-semibold text-white block">Gauss-Jordan Elimination</span>
-                          <span className="text-[11px] text-slate-400">แปลงสู่ Reduced Row Echelon Form (RREF)</span>
+                          <span className="text-xs font-semibold text-slate-900 block">Gauss-Jordan Elimination</span>
+                          <span className="text-[11px] text-slate-500">แปลงสู่ Reduced Row Echelon Form (RREF)</span>
                         </div>
                       </label>
 
@@ -432,8 +430,8 @@ export default function MatrixSolverPage() {
                         onClick={() => setSelectedMethod('GAUSS')}
                         className={`flex items-start p-3 rounded-xl border cursor-pointer transition ${
                           selectedMethod === 'GAUSS'
-                            ? 'border-indigo-500/60 bg-indigo-950/30'
-                            : 'border-slate-800 hover:border-slate-700 bg-slate-900/40'
+                            ? 'border-indigo-500 bg-white ring-1 ring-indigo-500 shadow-xs'
+                            : 'border-slate-200 bg-white hover:border-slate-300'
                         }`}
                       >
                         <input
@@ -445,8 +443,8 @@ export default function MatrixSolverPage() {
                           className="w-4 h-4 mt-0.5 text-indigo-600 focus:ring-indigo-500"
                         />
                         <div className="ml-3">
-                          <span className="text-xs font-semibold text-white block">Gauss Elimination</span>
-                          <span className="text-[11px] text-slate-400">สามเหลี่ยมบน + แทนค่าย้อนกลับ (Back-substitution)</span>
+                          <span className="text-xs font-semibold text-slate-900 block">Gauss Elimination</span>
+                          <span className="text-[11px] text-slate-500">สามเหลี่ยมบน + แทนค่าย้อนกลับ (Back-substitution)</span>
                         </div>
                       </label>
 
@@ -454,8 +452,8 @@ export default function MatrixSolverPage() {
                         onClick={() => setSelectedMethod('CRAMER')}
                         className={`flex items-start p-3 rounded-xl border cursor-pointer transition ${
                           selectedMethod === 'CRAMER'
-                            ? 'border-indigo-500/60 bg-indigo-950/30'
-                            : 'border-slate-800 hover:border-slate-700 bg-slate-900/40'
+                            ? 'border-indigo-500 bg-white ring-1 ring-indigo-500 shadow-xs'
+                            : 'border-slate-200 bg-white hover:border-slate-300'
                         }`}
                       >
                         <input
@@ -467,8 +465,8 @@ export default function MatrixSolverPage() {
                           className="w-4 h-4 mt-0.5 text-indigo-600 focus:ring-indigo-500"
                         />
                         <div className="ml-3">
-                          <span className="text-xs font-semibold text-white block">Cramer's Rule</span>
-                          <span className="text-[11px] text-slate-400">อัตราส่วน Determinant: x_i = det(A_i) / det(A)</span>
+                          <span className="text-xs font-semibold text-slate-900 block">Cramer's Rule</span>
+                          <span className="text-[11px] text-slate-500">อัตราส่วน Determinant: x_i = det(A_i) / det(A)</span>
                         </div>
                       </label>
                     </div>
@@ -476,7 +474,7 @@ export default function MatrixSolverPage() {
 
                   <button
                     onClick={() => executeSolve(matrixA, vectorB, selectedMethod)}
-                    className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-500 via-indigo-600 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white text-xs font-semibold rounded-2xl shadow-xl shadow-indigo-500/25 transition flex items-center justify-center gap-2 transform active:scale-[0.99]"
+                    className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white text-xs font-semibold rounded-2xl shadow-md shadow-indigo-100 transition flex items-center justify-center gap-2 transform active:scale-[0.99]"
                   >
                     <Sparkles className="w-4 h-4" />
                     <span>คำนวณและแสดงขั้นตอนวิธีทำ (Solve)</span>
@@ -489,21 +487,21 @@ export default function MatrixSolverPage() {
 
             {/* Results & Stepper Card */}
             {result && (
-              <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl backdrop-blur space-y-6">
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-sm space-y-6">
                 
                 {/* Result Summary Bar */}
-                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg border ${
                       result.isSingular
-                        ? 'bg-rose-500/20 text-rose-400 border-rose-500/30'
-                        : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                        ? 'bg-rose-50 text-rose-600 border-rose-200'
+                        : 'bg-emerald-50 text-emerald-600 border-emerald-200'
                     }`}>
                       {result.isSingular ? <AlertTriangle className="w-5 h-5" /> : <CheckCircle2 className="w-5 h-5" />}
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-white">คำตอบของระบบสมการ (Solutions)</h3>
-                      <p className="text-[11px] text-slate-400">
+                      <h3 className="text-sm font-bold text-slate-900">คำตอบของระบบสมการ (Solutions)</h3>
+                      <p className="text-[11px] text-slate-500">
                         วิธี: {result.solverType} • เวลาคำนวณ: {result.executionTimeMs?.toFixed(2)} ms
                       </p>
                     </div>
@@ -511,41 +509,41 @@ export default function MatrixSolverPage() {
 
                   <div className="flex flex-wrap items-center gap-2">
                     {result.isSingular ? (
-                      <div className="px-3 py-1.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-semibold">
+                      <div className="px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
                         ⚠️ ระบบสมการไม่มีคำตอบเอกลักษณ์ (Determinant = 0)
                       </div>
                     ) : (
                       result.answers.map((ans, idx) => (
                         <div
                           key={idx}
-                          className="px-3.5 py-1.5 rounded-xl bg-slate-950 border border-indigo-500/40 flex items-center gap-2 shadow-sm"
+                          className="px-3.5 py-1.5 rounded-xl bg-slate-50 border border-indigo-200 flex items-center gap-2 shadow-2xs"
                         >
-                          <span className="text-xs text-indigo-300 font-mono">x{idx + 1} =</span>
-                          <span className="text-sm font-bold text-cyan-300 font-mono">{ans}</span>
+                          <span className="text-xs text-slate-500 font-mono">x{idx + 1} =</span>
+                          <span className="text-sm font-bold text-indigo-600 font-mono">{ans}</span>
                         </div>
                       ))
                     )}
 
                     <button
                       onClick={handleShareLink}
-                      className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs flex items-center gap-1.5 transition ml-2"
+                      className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs flex items-center gap-1.5 transition ml-2 shadow-2xs"
                       title="คัดลอกลิงก์แชร์โจทย์"
                     >
-                      {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
+                      {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
                       <span>{copiedLink ? 'คัดลอกแล้ว!' : 'แชร์ลิงก์'}</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Step-by-Step Stepper Display */}
-                <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-inner">
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
                   
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider font-mono">
+                      <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider font-mono">
                         🔍 ขั้นตอนวิธีทำ (Step-by-Step Walkthrough)
                       </span>
-                      <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800 text-slate-400">
+                      <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-white border border-slate-200 text-slate-600 shadow-2xs">
                         ขั้นตอนที่ {activeStepIdx + 1} / {result.steps.length}
                       </span>
                     </div>
@@ -554,7 +552,7 @@ export default function MatrixSolverPage() {
                       <button
                         onClick={() => setActiveStepIdx(Math.max(0, activeStepIdx - 1))}
                         disabled={activeStepIdx === 0}
-                        className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 border border-slate-700 transition disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
+                        className="px-3 py-1 rounded-lg bg-white hover:bg-slate-100 text-xs font-medium text-slate-700 border border-slate-200 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 shadow-2xs"
                       >
                         <ChevronLeft className="w-3.5 h-3.5" />
                         <span>ย้อนกลับ</span>
@@ -562,7 +560,7 @@ export default function MatrixSolverPage() {
                       <button
                         onClick={() => setActiveStepIdx(Math.min(result.steps.length - 1, activeStepIdx + 1))}
                         disabled={activeStepIdx === result.steps.length - 1}
-                        className="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white shadow transition disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
+                        className="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold text-white shadow-xs transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1"
                       >
                         <span>ถัดไป</span>
                         <ChevronRight className="w-3.5 h-3.5" />
@@ -575,29 +573,29 @@ export default function MatrixSolverPage() {
                     <div className="space-y-4">
                       
                       <div className="space-y-1">
-                        <div className="text-indigo-300 font-semibold text-xs sm:text-sm flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+                        <div className="text-indigo-900 font-semibold text-xs sm:text-sm flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
                           <span>{result.steps[activeStepIdx].title}</span>
                         </div>
-                        <p className="text-xs text-slate-400 leading-relaxed">
+                        <p className="text-xs text-slate-600 leading-relaxed">
                           {result.steps[activeStepIdx].description}
                         </p>
                       </div>
 
                       {/* Formula KaTeX display if present */}
                       {result.steps[activeStepIdx].latexFormula && (
-                        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs overflow-x-auto text-cyan-300">
+                        <div className="p-3 rounded-xl bg-white border border-slate-200 text-xs overflow-x-auto text-indigo-950 shadow-2xs">
                           <KaTeXMath math={result.steps[activeStepIdx].latexFormula!} block={true} />
                         </div>
                       )}
 
                       {/* Matrix Representation */}
-                      <div className="inline-block bg-slate-900/90 border border-slate-800/90 rounded-xl p-3 shadow-inner">
+                      <div className="inline-block bg-white border border-slate-200 rounded-xl p-3 shadow-2xs">
                         <div className="space-y-1.5 font-mono text-xs">
                           {result.steps[activeStepIdx].matrix.map((row, rIdx) => (
                             <div key={rIdx} className="flex items-center gap-2">
-                              <span className="text-slate-500 text-[10px] w-5">R{rIdx + 1}</span>
-                              <span className="text-slate-500">[</span>
+                              <span className="text-slate-400 text-[10px] w-5">R{rIdx + 1}</span>
+                              <span className="text-slate-400">[</span>
                               {row.map((val, cIdx) => {
                                 const isResultCol = cIdx === row.length - 1;
                                 const formatted = Math.abs(val) < 1e-9 ? '0.00' : val.toFixed(2);
@@ -606,15 +604,15 @@ export default function MatrixSolverPage() {
                                     key={cIdx}
                                     className={`w-14 text-right py-0.5 px-1 rounded ${
                                       isResultCol
-                                        ? 'text-cyan-400 font-bold border-l border-slate-800 pl-2 bg-indigo-950/20'
-                                        : 'text-slate-200'
+                                        ? 'text-indigo-700 font-bold border-l border-slate-200 pl-2 bg-indigo-50/60'
+                                        : 'text-slate-800'
                                     }`}
                                   >
                                     {formatted}
                                   </span>
                                 );
                               })}
-                              <span className="text-slate-500">]</span>
+                              <span className="text-slate-400">]</span>
                             </div>
                           ))}
                         </div>
@@ -631,35 +629,33 @@ export default function MatrixSolverPage() {
           </div>
         )}
 
-
-
         {/* ==================================================== */}
-        {/* TAB 3: MONGODB HISTORY VIEW */}
+        {/* TAB 2: MONGODB HISTORY VIEW */}
         {/* ==================================================== */}
         {activeTab === 'history' && (
-          <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-200">
                   <Database className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-white">ประวัติการคำนวณที่บันทึก (MongoDB Database)</h2>
-                  <p className="text-xs text-slate-400">รายการโจทย์ที่เคยคำนวณ คลิกเพื่อโหลดกลับมาคำนวณใหม่ได้ทันที</p>
+                  <h2 className="text-base font-bold text-slate-900">ประวัติการคำนวณที่บันทึก (MongoDB Database)</h2>
+                  <p className="text-xs text-slate-500">รายการโจทย์ที่เคยคำนวณ คลิกเพื่อโหลดกลับมาคำนวณใหม่ได้ทันที</p>
                 </div>
               </div>
               <button
                 onClick={fetchHistory}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition"
+                className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs text-slate-700 border border-slate-200 transition shadow-2xs"
               >
                 รีเฟรช
               </button>
             </div>
 
             {isLoadingHistory ? (
-              <div className="text-center py-10 text-xs text-slate-500">กำลังโหลดข้อมูลจากฐานข้อมูล...</div>
+              <div className="text-center py-10 text-xs text-slate-400">กำลังโหลดข้อมูลจากฐานข้อมูล...</div>
             ) : historyList.length === 0 ? (
-              <div className="text-center py-10 text-xs text-slate-500">
+              <div className="text-center py-10 text-xs text-slate-400">
                 ยังไม่มีประวัติการคำนวณในระบบ ลองกด "คำนวณ" ในหน้าแรกเพื่อบันทึกรายการแรก
               </div>
             ) : (
@@ -675,27 +671,27 @@ export default function MatrixSolverPage() {
                       setActiveTab('solver');
                       executeSolve(item.matrixA, item.vectorB, item.method);
                     }}
-                    className="p-4 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/50 cursor-pointer transition space-y-2 group"
+                    className="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-indigo-400 hover:bg-white hover:shadow-sm cursor-pointer transition space-y-2 group"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-semibold text-indigo-300">
+                      <span className="text-xs font-mono font-semibold text-indigo-600">
                         ขนาด {item.dimension}×{item.dimension} • {item.method}
                       </span>
-                      <span className="text-[10px] text-slate-500">
+                      <span className="text-[10px] text-slate-400">
                         {new Date(item.createdAt).toLocaleTimeString('th-TH')}
                       </span>
                     </div>
 
-                    <div className="text-xs font-mono text-slate-300 flex items-center gap-1.5 flex-wrap">
-                      <span className="text-slate-500">คำตอบ:</span>
+                    <div className="text-xs font-mono text-slate-700 flex items-center gap-1.5 flex-wrap">
+                      <span className="text-slate-400">คำตอบ:</span>
                       {item.answers?.map((ans: number, aIdx: number) => (
-                        <span key={aIdx} className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-cyan-300">
+                        <span key={aIdx} className="px-1.5 py-0.5 rounded bg-white border border-slate-200 text-indigo-700 font-semibold">
                           x{aIdx + 1}={ans}
                         </span>
                       ))}
                     </div>
 
-                    <div className="text-[11px] text-indigo-400 group-hover:underline flex items-center gap-1 pt-1">
+                    <div className="text-[11px] text-indigo-600 group-hover:underline flex items-center gap-1 pt-1 font-medium">
                       <span>โหลดโจทย์นี้</span>
                       <ArrowRight className="w-3 h-3" />
                     </div>
@@ -709,9 +705,9 @@ export default function MatrixSolverPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950/60 py-4 text-center text-xs text-slate-500">
-        <p>NumeriCraft • วิชา 040613204 Object-Oriented Programming (KMUTNB)</p>
-        <p className="text-[11px] text-slate-600 mt-1">Full-Stack Web App: Next.js • TypeScript • Tailwind CSS • MongoDB • Vercel</p>
+      <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500">
+        <p>Linear System • วิชา 040613204 Object-Oriented Programming (KMUTNB)</p>
+        <p className="text-[11px] text-slate-400 mt-1">Full-Stack Web App: Next.js • TypeScript • Tailwind CSS • MongoDB • Vercel</p>
       </footer>
 
     </div>
