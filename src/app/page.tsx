@@ -8,7 +8,6 @@ import { SolverFactory } from '@/lib/oop/SolverFactory';
 import { MatrixUtils } from '@/lib/oop/MatrixUtils';
 import { 
   Calculator, 
-  BookOpen, 
   History, 
   Sparkles, 
   Trash2, 
@@ -16,11 +15,8 @@ import {
   ChevronRight, 
   CheckCircle2, 
   AlertTriangle, 
-  Copy, 
   Check, 
   Share2, 
-  Layers, 
-  Cpu, 
   Database,
   ArrowRight
 } from 'lucide-react';
@@ -75,7 +71,7 @@ const PRESETS: Record<string, { name: string; dim: number; A: number[][]; b: num
 };
 
 export default function MatrixSolverPage() {
-  const [activeTab, setActiveTab] = useState<'solver' | 'oop' | 'history'>('solver');
+  const [activeTab, setActiveTab] = useState<'solver' | 'history'>('solver');
   const [dimension, setDimension] = useState<number>(3);
   const [matrixA, setMatrixA] = useState<number[][]>(PRESETS.default3.A);
   const [vectorB, setVectorB] = useState<number[]>(PRESETS.default3.b);
@@ -246,44 +242,22 @@ export default function MatrixSolverPage() {
       <header className="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-4">
           
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-indigo-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 font-mono font-bold text-lg">
-              [A]
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-base font-bold text-white tracking-tight">NumeriCraft</h1>
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
-                  Matrix Solver Lab
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400">ระบบแก้สมการเชิงเส้น Step-by-Step • สถาปัตยกรรมเชิงวัตถุ (OOP)</p>
-            </div>
+          <div className="flex items-center">
+            <h1 className="text-xl font-bold text-white tracking-wide">Linear System</h1>
           </div>
 
           {/* Tab Navigation */}
           <nav className="flex p-1 bg-slate-950 rounded-xl border border-slate-800 text-xs font-medium">
             <button
               onClick={() => setActiveTab('solver')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition ${
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg transition ${
                 activeTab === 'solver'
                   ? 'bg-indigo-600 text-white shadow'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
               }`}
             >
               <Calculator className="w-3.5 h-3.5" />
-              <span>หน้าคำนวณ (Solver)</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('oop')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition ${
-                activeTab === 'oop'
-                  ? 'bg-indigo-600 text-white shadow'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>โครงสร้าง OOP สำหรับรายงาน</span>
+              <span>คำนวณ</span>
             </button>
             <button
               onClick={() => setActiveTab('history')}
@@ -657,107 +631,7 @@ export default function MatrixSolverPage() {
           </div>
         )}
 
-        {/* ==================================================== */}
-        {/* TAB 2: OOP ARCHITECTURE BLUEPRINT (FOR REPORT CH. 2) */}
-        {/* ==================================================== */}
-        {activeTab === 'oop' && (
-          <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur space-y-6">
-            
-            <div className="border-b border-slate-800 pb-4">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                  <BookOpen className="w-5 h-5" />
-                </div>
-                <div>
-                  <h2 className="text-base font-bold text-white">โครงสร้างการออกแบบเชิงวัตถุ (OOP Architecture)</h2>
-                  <p className="text-xs text-slate-400">
-                    ข้อมูลและหลักการเชิงวัตถุตามเกณฑ์รายงาน บทที่ 2 วิชา 040613204 Object-Oriented Programming (KMUTNB)
-                  </p>
-                </div>
-              </div>
-            </div>
 
-            {/* 5 Pillars Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-              
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
-                <div className="flex items-center gap-2 text-indigo-400 font-semibold text-sm">
-                  <Layers className="w-4 h-4" />
-                  <span>1. Inheritance &amp; Abstract</span>
-                </div>
-                <p className="text-slate-400 leading-relaxed">
-                  คลาสแม่ <code className="text-indigo-300">LinearSystemSolver</code> เป็น Abstract Class กำหนด method <code className="text-white">solve(): SolutionResult</code> ให้คลาสลูก <code className="text-cyan-300">GaussJordanSolver</code>, <code className="text-cyan-300">GaussEliminationSolver</code>, และ <code className="text-cyan-300">CramerSolver</code> สืบทอดและ Override
-                </p>
-              </div>
-
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
-                <div className="flex items-center gap-2 text-cyan-400 font-semibold text-sm">
-                  <Cpu className="w-4 h-4" />
-                  <span>2. Polymorphism</span>
-                </div>
-                <p className="text-slate-400 leading-relaxed">
-                  ผ่าน <code className="text-cyan-300">SolverFactory.createSolver()</code> ผู้เรียกใช้สามารถสั่ง <code className="text-white">solver.solve()</code> บนอินสแตนซ์ใดก็ได้ ระบบจะทำงานตามขั้นตอนของคลาสลูกนั้นๆ และส่งผลลัพธ์ในรูปแบบมาตรฐานเดียวกัน
-                </p>
-              </div>
-
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
-                <div className="flex items-center gap-2 text-emerald-400 font-semibold text-sm">
-                  <Layers className="w-4 h-4" />
-                  <span>3. Composition (has-a)</span>
-                </div>
-                <p className="text-slate-400 leading-relaxed">
-                  คลาส <code className="text-emerald-300">LinearSystemSolver</code> มี Attribute ภายในเป็น <code className="text-white">problem: LinearSystemProblem</code> โดย Solver ทำหน้าที่แก้ปัญหาที่มีโจทย์เป็นส่วนประกอบ แยก Data Model ออกจาก Execution Logic
-                </p>
-              </div>
-
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
-                <div className="flex items-center gap-2 text-amber-400 font-semibold text-sm">
-                  <Layers className="w-4 h-4" />
-                  <span>4. Encapsulation</span>
-                </div>
-                <p className="text-slate-400 leading-relaxed">
-                  ข้อมูลเมทริกซ์และเวกเตอร์ภายใน <code className="text-amber-300">LinearSystemProblem</code> ถูกตั้งเป็น <code className="text-white">private</code> และเปิดให้เข้าถึงผ่าน Getter Methods และ Validation เท่านั้น ป้องกันการแก้ไขตรง
-                </p>
-              </div>
-
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
-                <div className="flex items-center gap-2 text-rose-400 font-semibold text-sm">
-                  <Layers className="w-4 h-4" />
-                  <span>5. Constructor &amp; Super</span>
-                </div>
-                <p className="text-slate-400 leading-relaxed">
-                  คลาสลูกทุกคลาสส่งค่าอาร์กิวเมนต์ผ่าน Constructor และเรียก <code className="text-rose-300">super(problem, 'GAUSS_JORDAN')</code> เพื่อส่งต่อไปยังคลาสแม่ในการกำหนดคุณลักษณะพื้นฐาน
-                </p>
-              </div>
-
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
-                <div className="flex items-center gap-2 text-purple-400 font-semibold text-sm">
-                  <Database className="w-4 h-4" />
-                  <span>6. Algorithm (RREF &amp; Pivoting)</span>
-                </div>
-                <p className="text-slate-400 leading-relaxed">
-                  มีอัลกอริทึม Partial Pivoting สลับแถวเพื่อไม่ให้ Pivot เป็น 0 ลด Round-off error และเก็บบันทึก Row Operations ทีละสเต็ปสำหรับการเรนเดอร์กราฟิก
-                </p>
-              </div>
-
-            </div>
-
-            {/* Code mapping snippet */}
-            <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 font-mono text-xs text-slate-300 overflow-x-auto space-y-2">
-              <div className="text-slate-500">// ผังโค้ดจริงที่ใช้ขับเคลื่อนระบบนี้ (นำไปแปะในรายงาน บทที่ 2 ได้ทันที)</div>
-              <div className="text-indigo-400">export abstract class <span className="text-cyan-300">LinearSystemSolver</span> &#123;</div>
-              <div className="pl-4 text-slate-400">protected problem: LinearSystemProblem; // Composition</div>
-              <div className="pl-4 text-slate-400">protected steps: StepLog[] = [];</div>
-              <div className="pl-4 text-emerald-400">abstract solve(): SolutionResult; // Polymorphic method</div>
-              <div className="text-indigo-400">&#125;</div>
-              <br />
-              <div className="text-indigo-400">export class <span className="text-white">GaussJordanSolver</span> extends <span className="text-cyan-300">LinearSystemSolver</span> &#123;</div>
-              <div className="pl-4 text-slate-400">// ทำ Partial Pivoting + Row Operations (RREF)</div>
-              <div className="text-indigo-400">&#125;</div>
-            </div>
-
-          </div>
-        )}
 
         {/* ==================================================== */}
         {/* TAB 3: MONGODB HISTORY VIEW */}
