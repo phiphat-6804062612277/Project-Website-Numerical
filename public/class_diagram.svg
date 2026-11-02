@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1740 1070" width="1740" height="1070">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap');
+      
+      text {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      }
+      .code {
+        font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+        font-size: 13px;
+      }
+      .title-main { font-size: 24px; font-weight: 700; fill: #0F172A; }
+      .title-sub { font-size: 14px; font-weight: 500; fill: #64748B; }
+      
+      .box-shadow {
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.1));
+      }
+      
+      /* Class Headers */
+      .hdr-text { font-size: 16px; font-weight: 700; text-anchor: middle; }
+      .stereo-text { font-size: 12px; font-style: italic; font-weight: 500; text-anchor: middle; }
+      
+      /* Members */
+      .vis-public { fill: #16A34A; font-weight: 700; }
+      .vis-private { fill: #DC2626; font-weight: 700; }
+      .vis-protected { fill: #D97706; font-weight: 700; }
+      .member-name { fill: #1E293B; }
+      .member-type { fill: #64748B; font-weight: 400; }
+      
+      /* Connection lines */
+      .conn-line { stroke: #334155; stroke-width: 2; fill: none; }
+      .conn-dash { stroke: #475569; stroke-width: 2; stroke-dasharray: 6,4; fill: none; }
+      .conn-label { font-size: 12px; font-weight: 600; fill: #334155; }
+    </style>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="100%" height="100%" fill="#F8FAFC"/>
+  <rect x="15" y="15" width="1710" height="1040" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+
+  <!-- Top Title Banner -->
+  <g transform="translate(45, 52)">
+    <circle cx="18" cy="18" r="18" fill="#EEF2FF"/>
+    <path d="M11 18h14M18 11v14" stroke="#4F46E5" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="48" y="16" class="title-main">Linear System Matrix Solver - UML Class Diagram</text>
+    <text x="48" y="36" class="title-sub">วิชา 040613204 Object-Oriented Programming (KMUTNB) • สถาปัตยกรรมระบบคำนวณระบบสมการเชิงเส้นแบบเชิงวัตถุ</text>
+  </g>
+
+  <!-- Legend Box (Top Right) -->
+  <g transform="translate(1130, 32)">
+    <rect width="555" height="78" rx="10" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/>
+    <text x="18" y="22" font-size="12" font-weight="700" fill="#334155">สัญลักษณ์และความสัมพันธ์ (Legend)</text>
+    
+    <!-- Visibility symbols -->
+    <text x="18" y="46" class="code vis-public">+</text>
+    <text x="32" y="46" font-size="12" fill="#475569">Public</text>
+    <text x="85" y="46" class="code vis-protected">#</text>
+    <text x="99" y="46" font-size="12" fill="#475569">Protected</text>
+    <text x="170" y="46" class="code vis-private">-</text>
+    <text x="182" y="46" font-size="12" fill="#475569">Private</text>
+    
+    <!-- Connectors -->
+    <line x1="250" y1="42" x2="280" y2="42" stroke="#334155" stroke-width="2"/>
+    <polygon points="280 42, 270 36, 270 48" fill="#FFFFFF" stroke="#334155" stroke-width="1.5"/>
+    <text x="290" y="46" font-size="12" fill="#475569">Inheritance (extends)</text>
+
+    <!-- Composition -->
+    <polygon points="250 63, 256 59, 262 63, 256 67" fill="#1E293B"/>
+    <line x1="262" y1="63" x2="285" y2="63" stroke="#334155" stroke-width="2"/>
+    <text x="290" y="67" font-size="12" fill="#475569">Composition (has-a)</text>
+
+    <!-- Dependency -->
+    <line x1="438" y1="63" x2="468" y2="63" stroke="#475569" stroke-width="2" stroke-dasharray="4,3"/>
+    <polyline points="460 59, 468 63, 460 67" fill="none" stroke="#475569" stroke-width="1.5"/>
+    <text x="478" y="67" font-size="12" fill="#475569">Dependency</text>
+  </g>
+
+  <!-- ====================================================================== -->
+  <!-- 1. Problem (Abstract Class - Top Left) -->
+  <!-- ====================================================================== -->
+  <g class="box-shadow" transform="translate(45, 125)">
+    <!-- Outer Card: Height = 330 -->
+    <rect width="420" height="330" rx="10" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5"/>
+    <!-- Header -->
+    <path d="M 0 10 Q 0 0 10 0 L 410 0 Q 420 0 420 10 L 420 50 L 0 50 Z" fill="#EFF6FF"/>
+    <text x="210" y="22" class="stereo-text" fill="#1D4ED8">&lt;&lt;abstract&gt;&gt;</text>
+    <text x="210" y="40" class="hdr-text" fill="#1E40AF">Problem</text>
+    <line x1="0" y1="50" x2="420" y2="50" stroke="#3B82F6" stroke-width="1.5"/>
+
+    <!-- Attributes (5 items) -->
+    <g transform="translate(18, 72)" class="code">
+      <text y="0"><tspan class="vis-protected">#</tspan> <tspan class="member-name">id</tspan><tspan class="member-type"> : string</tspan></text>
+      <text y="22"><tspan class="vis-protected">#</tspan> <tspan class="member-name">userId</tspan><tspan class="member-type"> : string</tspan></text>
+      <text y="44"><tspan class="vis-protected">#</tspan> <tspan class="member-name">problemType</tspan><tspan class="member-type"> : ProblemType</tspan></text>
+      <text y="66"><tspan class="vis-protected">#</tspan> <tspan class="member-name">rawInput</tspan><tspan class="member-type"> : string</tspan></text>
+      <text y="88"><tspan class="vis-protected">#</tspan> <tspan class="member-name">createdAt</tspan><tspan class="member-type"> : Date</tspan></text>
+    </g>
+    <line x1="0" y1="175" x2="420" y2="175" stroke="#DBEAFE" stroke-width="1"/>
+
+    <!-- Methods (6 items) -->
+    <g transform="translate(18, 198)" class="code">
+      <text y="0"><tspan class="vis-public">+</tspan> <tspan class="member-name">Problem(type, rawInput, userId?)</tspan></text>
+      <text y="21"><tspan class="vis-public">+</tspan> <tspan class="member-name">getId()</tspan><tspan class="member-type"> : string</tspan></text>
+      <text y="42"><tspan class="vis-public">+</tspan> <tspan class="member-name">getProblemType()</tspan><tspan class="member-type"> : ProblemType</tspan></text>
+      <text y="63"><tspan class="vis-public">+</tspan> <tspan class="member-name">getRawInput()</tspan><tspan class="member-type"> : string</tspan></text>
+      <text y="84"><tspan class="vis-public">+</tspan> <tspan class="member-name">getCreatedAt()</tspan><tspan class="member-type"> : Date</tspan></text>
+      <text y="105" font-style="italic"><tspan class="vis-public">+</tspan> <tspan class="member-name">{abstract} formatInput()</tspan><tspan class="member-type"> : boolean</tspan></text>
+    </g>
+  </g>
+
+  <!-- ====================================================================== -->
+  <!-- 2. LinearSystemProblem (Middle Left) -->
+  <!-- ====================================================================== -->
+  <g class="box-shadow" transform="translate(45, 515)">
+    <!-- Outer Card: Height = 310 -->
+    <rect width="420" height="310" rx="10" fill="#FFFFFF" stroke="#2563EB" stroke-width="1.5"/>
+    <!-- Header -->
+    <path d="M 0 10 Q 0 0 10 0 L 410 0 Q 420 0 420 10 L 420 45 L 0 45 Z" fill="#DBEAFE"/>
+    <text x="210" y="28" class="hdr-text" fill="#1E3A8A">LinearSystemProblem</text>
+    <line x1="0" y1="45" x2="420" y2="45" stroke="#2563EB" stroke-width="1.5"/>
+
+    <!-- Attributes (3 items) -->
+    <g transform="translate(18, 66)" class="code">
+      <text y="0"><tspan class="vis-private">-</tspan> <tspan class="member-name">matrixA</tspan><tspan class="member-type"> : number[][]</tspan></text>
+      <text y="22"><tspan class="vis-private">-</tspan> <tspan class="member-name">vectorB</tspan><tspan class="member-type"> : number[]</tspan></text>
+      <text y="44"><tspan class="vis-private">-</tspan> <tspan class="member-name">dimension</tspan><tspan class="member-type"> : number</tspan></text>
+    </g>
+    <line x1="0" y1="125" x2="420" y2="125" stroke="#DBEAFE" stroke-width="1"/>
+
+    <!-- Methods (7 items) -->
+    <g transform="translate(18, 148)" class="code">
+      <text y="0"><tspan class="vis-public">+</tspan> <tspan class="member-name">LinearSystemProblem(A, b, userId?)</tspan></text>
+      <text y="21"><tspan class="vis-public">+</tspan> <tspan class="member-name">getMatrixA()</tspan><tspan class="member-type"> : number[][]</tspan></text>
+      <text y="42"><tspan class="vis-public">+</tspan> <tspan class="member-name">getVectorB()</tspan><tspan class="member-type"> : number[]</tspan></text>
+      <text y="63"><tspan class="vis-public">+</tspan> <tspan class="member-name">getDimension()</tspan><tspan class="member-type"> : number</tspan></text>
+      <text y="84"><tspan class="vis-public">+</tspan> <tspan class="member-name">getDeterminant()</tspan><tspan class="member-type"> : number</tspan></text>
+      <text y="105"><tspan class="vis-public">+</tspan> <tspan class="member-name">isSingular()</tspan><tspan class="member-type"> : boolean</tspan></text>
+      <text y="126"><tspan class="vis-public">+</tspan> <tspan class="member-name">formatInput()</tspan><tspan class="member-type"> : boolean</tspan></text>
+    </g>
+  </g>
+
+  <!-- ====================================================================== -->
+  <!-- 3. MatrixUtils (Bottom Left Utility) -->
+  <!-- ====================================================================== -->
+  <g class="box-shadow" transform="translate(45, 885)">
+    <rect width="420" height="135" rx="10" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+    <path d="M 0 10 Q 0 0 10 0 L 410 0 Q 420 0 420 10 L 420 45 L 0 45 Z" fill="#F1F5F9"/>
+    <text x="210" y="20" class="stereo-text" fill="#475569">&lt;&lt;utility&gt;&gt;</text>
+    <text x="210" y="37" class="hdr-text" fill="#334155">MatrixUtils</text>
+    <line x1="0" y1="45" x2="420" y2="45" stroke="#64748B" stroke-width="1.5"/>
+
+    <!-- Methods -->
+    <g transform="translate(18, 68)" class="code">
+      <text y="0"><tspan class="vis-public">+</tspan> <tspan class="member-name">{static} determinant(matrix)</tspan><tspan class="member-type"> : number</tspan></text>
+      <text y="22"><tspan class="vis-public">+</tspan> <tspan class="member-name">{static} cloneMatrix(matrix)</tspan><tspan class="member-type"> : number[][]</tspan></text>
+      <text y="44"><tspan class="vis-public">+</tspan> <tspan class="member-name">{static} cleanNumber(val)</tspan><tspan class="member-type"> : number</tspan></text>
+    </g>
+  </g>
+
+  <!-- ====================================================================== -->
+  <!-- 4. LinearSystemSolver (Abstract Class - Center Right) -->
+  <!-- ====================================================================== -->
+  <g class="box-shadow" transform="translate(630, 215)">
+    <!-- Outer Card: Height = 350 -->
+    <rect width="530" height="350" rx="10" fill="#FFFFFF" stroke="#6366F1" stroke-width="1.5"/>
+    <!-- Header -->
+    <path d="M 0 10 Q 0 0 10 0 L 520 0 Q 530 0 530 10 L 530 50 L 0 50 Z" fill="#EEF2FF"/>
+    <text x="265" y="22" class="stereo-text" fill="#4F46E5">&lt;&lt;abstract&gt;&gt;</text>
+    <text x="265" y="40" class="hdr-text" fill="#3730A3">LinearSystemSolver</text>
+    <line x1="0" y1="50" x2="530" y2="50" stroke="#6366F1" stroke-width="1.5"/>
+
+    <!-- Attributes -->
+    <g transform="translate(20, 74)" class="code">
+      <text y="0"><tspan class="vis-protected">#</tspan> <tspan class="member-name">solverId</tspan><tspan class="member-type"> : string</tspan></text>
+      <text y="22"><tspan class="vis-protected">#</tspan> <tspan class="member-name">problem</tspan><tspan class="member-type"> : LinearSystemProblem</tspan></text>
+      <text y="44"><tspan class="vis-protected">#</tspan> <tspan class="member-name">solutionType</tspan><tspan class="member-type"> : SolutionType</tspan></text>
+      <text y="66"><tspan class="vis-protected">#</tspan> <tspan class="member-name">steps</tspan><tspan class="member-type"> : StepLog[]</tspan></text>
+      <text y="88"><tspan class="vis-protected">#</tspan> <tspan class="member-name">answers</tspan><tspan class="member-type"> : number[]</tspan></text>
+    </g>
+    <line x1="0" y1="180" x2="530" y2="180" stroke="#E0E7FF" stroke-width="1"/>
+
+    <!-- Methods -->
+    <g transform="translate(20, 204)" class="code">
+      <text y="0"><tspan class="vis-public">+</tspan> <tspan class="member-name">LinearSystemSolver(problem, solutionType)</tspan></text>
+      <text y="22" font-style="italic"><tspan class="vis-public">+</tspan> <tspan class="member-name">{abstract} solve()</tspan><tspan class="member-type"> : SolutionResult</tspan></text>
+      <text y="44"><tspan class="vis-public">+</tspan> <tspan class="member-name">getSteps()</tspan><tspan class="member-type"> : StepLog[]</tspan></text>
+      <text y="66"><tspan class="vis-public">+</tspan> <tspan class="member-name">getAnswers()</tspan><tspan class="member-type"> : number[]</tspan></text>
+      <text y="88"><tspan class="vis-protected">#</tspan> <tspan class="member-name">logStep(title, desc, matrix, latex?, type?)</tspan><tspan class="member-type"> : void</tspan></text>
+      <text y="110"><tspan class="vis-public">+</tspan> <tspan class="member-name">toLaTeXMatrix(matrix)</tspan><tspan class="member-type"> : string</tspan></text>
+    </g>
+  </g>
+
+  <!-- ====================================================================== -->
+  <!-- 5. SolverFactory (Top Right) -->
+  <!-- ====================================================================== -->
+  <g class="box-shadow" transform="translate(1220, 335)">
+    <rect width="455" height="95" rx="10" fill="#FFFFFF" stroke="#0284C7" stroke-width="1.5"/>
+    <path d="M 0 10 Q 0 0 10 0 L 445 0 Q 455 0 455 10 L 455 42 L 0 42 Z" fill="#E0F2FE"/>
+    <text x="227" y="19" class="stereo-text" fill="#0369A1">&lt;&lt;factory&gt;&gt;</text>
+    <text x="227" y="35" class="hdr-text" fill="#0C4A6E">SolverFactory</text>
+    <line x1="0" y1="42" x2="455" y2="42" stroke="#0284C7" stroke-width="1.5"/>
+
+    <!-- Methods -->
+    <g transform="translate(18, 68)" class="code">
+      <text y="0"><tspan class="vis-public">+</tspan> <tspan class="member-name">{static} createSolver(problem, type)</tspan><tspan class="member-type"> : LinearSystemSolver</tspan></text>
+    </g>
+  </g>
+
+  <!-- ====================================================================== -->
+  <!-- 6. Concrete Solvers (Subclasses - Bottom Row) -->
+  <!-- ====================================================================== -->
+  <!-- GaussJordanSolver -->
+  <g class="box-shadow" transform="translate(500, 705)">
+    <rect width="365" height="115" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
+    <path d="M 0 10 Q 0 0 10 0 L 355 0 Q 365 0 365 10 L 365 42 L 0 42 Z" fill="#ECFDF5"/>
+    <text x="182" y="27" class="hdr-text" fill="#065F46">GaussJordanSolver</text>
+    <line x1="0" y1="42" x2="365" y2="42" stroke="#10B981" stroke-width="1.5"/>
+    <g transform="translate(18, 68)" class="code">
+      <text y="0"><tspan class="vis-public">+</tspan> <tspan class="member-name">GaussJordanSolver(problem)</tspan></text>
+      <text y="24"><tspan class="vis-public">+</tspan> <tspan class="member-name">solve()</tspan><tspan class="member-type"> : SolutionResult</tspan></text>
+    </g>
+  </g>
+
+  <!-- GaussEliminationSolver -->
+  <g class="box-shadow" transform="translate(895, 705)">
+    <rect width="385" height="115" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
+    <path d="M 0 10 Q 0 0 10 0 L 375 0 Q 385 0 385 10 L 385 42 L 0 42 Z" fill="#ECFDF5"/>
+    <text x="192" y="27" class="hdr-text" fill="#065F46">GaussEliminationSolver</text>
+    <line x1="0" y1="42" x2="385" y2="42" stroke="#10B981" stroke-width="1.5"/>
+    <g transform="translate(18, 68)" class="code">
+      <text y="0"><tspan class="vis-public">+</tspan> <tspan class="member-name">GaussEliminationSolver(problem)</tspan></text>
+      <text y="24"><tspan class="vis-public">+</tspan> <tspan class="member-name">solve()</tspan><tspan class="member-type"> : SolutionResult</tspan></text>
+    </g>
+  </g>
+
+  <!-- CramerSolver -->
+  <g class="box-shadow" transform="translate(1310, 705)">
+    <rect width="365" height="115" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
+    <path d="M 0 10 Q 0 0 10 0 L 355 0 Q 365 0 365 10 L 365 42 L 0 42 Z" fill="#ECFDF5"/>
+    <text x="182" y="27" class="hdr-text" fill="#065F46">CramerSolver</text>
+    <line x1="0" y1="42" x2="365" y2="42" stroke="#10B981" stroke-width="1.5"/>
+    <g transform="translate(18, 68)" class="code">
+      <text y="0"><tspan class="vis-public">+</tspan> <tspan class="member-name">CramerSolver(problem)</tspan></text>
+      <text y="24"><tspan class="vis-public">+</tspan> <tspan class="member-name">solve()</tspan><tspan class="member-type"> : SolutionResult</tspan></text>
+    </g>
+  </g>
+
+
+  <!-- ====================================================================== -->
+  <!-- RELATIONSHIP LINES & ARROWS -->
+  <!-- ====================================================================== -->
+
+  <!-- 1. LinearSystemProblem extends Problem -->
+  <!-- From (255, 515) up to (255, 455) -->
+  <line x1="255" y1="515" x2="255" y2="470" class="conn-line"/>
+  <polygon points="255 455, 247 470, 263 470" fill="#FFFFFF" stroke="#334155" stroke-width="2"/>
+  <text x="268" y="492" class="conn-label">extends</text>
+
+  <!-- 2. LinearSystemProblem uses MatrixUtils -->
+  <!-- From (255, 825) down to (255, 885) -->
+  <line x1="255" y1="825" x2="255" y2="873" class="conn-dash"/>
+  <polyline points="248 873, 255 883, 262 873" fill="none" stroke="#475569" stroke-width="2"/>
+  <text x="268" y="858" class="conn-label">&lt;&lt;uses&gt;&gt;</text>
+
+  <!-- 3. LinearSystemSolver has-a LinearSystemProblem (COMPOSITION) -->
+  <!-- Connect from Solver left (630, 310) to Problem right (465, 600) via open gap -->
+  <!-- Diamond attached to Solver at (630, 310) pointing inwards -->
+  <polygon points="630 310, 622 304, 614 310, 622 316" fill="#1E293B" stroke="#1E293B" stroke-width="1.5"/>
+  <path d="M 614 310 L 540 310 L 540 600 L 465 600" class="conn-line"/>
+  
+  <!-- Pill Label in the gap -->
+  <g transform="translate(480, 440)">
+    <rect width="130" height="26" rx="6" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.2"/>
+    <text x="65" y="17" font-size="11" font-weight="600" fill="#1E293B" text-anchor="middle">Composition (has-a)</text>
+  </g>
+  <text x="475" y="592" font-size="11" font-weight="700" fill="#475569">1</text>
+  <text x="602" y="302" font-size="11" font-weight="700" fill="#475569">1</text>
+
+  <!-- 4. SolverFactory creates LinearSystemSolver (DEPENDENCY) -->
+  <!-- From SolverFactory left (1220, 382) to LinearSystemSolver right (1160, 382) -->
+  <line x1="1220" y1="382" x2="1172" y2="382" class="conn-dash"/>
+  <polyline points="1178 376, 1168 382, 1178 388" fill="none" stroke="#475569" stroke-width="2"/>
+  <text x="1175" y="372" class="conn-label">&lt;&lt;creates&gt;&gt;</text>
+
+  <!-- 5. 3 Solvers extend LinearSystemSolver (INHERITANCE TREE BUS) -->
+  <!-- Stem down from (895, 565) to (895, 645) -->
+  <polygon points="895 565, 887 580, 903 580" fill="#FFFFFF" stroke="#334155" stroke-width="2"/>
+  <line x1="895" y1="580" x2="895" y2="645" class="conn-line"/>
+  <text x="908" y="612" class="conn-label">extends</text>
+
+  <!-- Horizontal bus line from (682, 645) to (1492, 645) -->
+  <line x1="682" y1="645" x2="1492" y2="645" class="conn-line"/>
+
+  <!-- Drop line 1: down to GaussJordanSolver (682, 645) to (682, 705) -->
+  <line x1="682" y1="645" x2="682" y2="705" class="conn-line"/>
+
+  <!-- Drop line 2: down to GaussEliminationSolver (1087, 645) to (1087, 705) -->
+  <line x1="1087" y1="645" x2="1087" y2="705" class="conn-line"/>
+
+  <!-- Drop line 3: down to CramerSolver (1492, 645) to (1492, 705) -->
+  <line x1="1492" y1="645" x2="1492" y2="705" class="conn-line"/>
+
+</svg>
