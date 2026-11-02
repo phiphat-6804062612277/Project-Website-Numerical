@@ -16,16 +16,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 1. Create Problem Instance (OOP Class)
     const problem = new LinearSystemProblem(matrixA, vectorB);
-
-    // 2. Use Factory to create polymorphic Solver
     const solver = SolverFactory.createSolver(problem, method as SolutionType);
-
-    // 3. Solve polymorphically
     const result = solver.solve();
 
-    // 4. Save to Database (MongoDB)
     let savedId: string | null = null;
     if (!result.isSingular) {
       try {
@@ -46,10 +40,10 @@ export async function POST(req: NextRequest) {
       result,
       savedId
     });
-  } catch (error: any) {
-    console.error('API /solve error:', error);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Calculation error';
     return NextResponse.json(
-      { success: false, error: error.message || 'Calculation error' },
+      { success: false, error: message },
       { status: 400 }
     );
   }

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { KaTeXMath } from '@/components/KaTeXMath';
-import { SolutionType, SolutionResult } from '@/lib/oop/types';
+import { SolutionType, SolutionResult, SavedProblemDocument } from '@/lib/oop/types';
 import { LinearSystemProblem } from '@/lib/oop/LinearSystemProblem';
 import { SolverFactory } from '@/lib/oop/SolverFactory';
 import { MatrixUtils } from '@/lib/oop/MatrixUtils';
@@ -43,13 +43,8 @@ export default function MatrixSolverPage() {
   // Solution state
   const [result, setResult] = useState<SolutionResult | null>(null);
   const [activeStepIdx, setActiveStepIdx] = useState<number>(0);
-  const [historyList, setHistoryList] = useState<any[]>([]);
+  const [historyList, setHistoryList] = useState<SavedProblemDocument[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(false);
-
-  // Load history on mount
-  useEffect(() => {
-    fetchHistory();
-  }, []);
 
   // Fetch recent calculations from MongoDB
   const fetchHistory = async () => {
@@ -66,6 +61,26 @@ export default function MatrixSolverPage() {
       setIsLoadingHistory(false);
     }
   };
+
+  // Load history on mount (React 19 lifecycle pattern)
+  useEffect(() => {
+    let ignore = false;
+    async function loadInitialHistory() {
+      try {
+        const res = await fetch('/api/history');
+        const data = await res.json();
+        if (!ignore && data.success && Array.isArray(data.history)) {
+          setHistoryList(data.history);
+        }
+      } catch (e) {
+        console.warn('Could not fetch history from API:', e);
+      }
+    }
+    loadInitialHistory();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   // Execute solver using OOP classes
   const executeSolve = (A: number[][], b: number[], method: SolutionType) => {
@@ -89,7 +104,7 @@ export default function MatrixSolverPage() {
           }
         })
         .catch(err => console.warn('Saved background note:', err));
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Solve error:', err);
     }
   };
@@ -416,7 +431,7 @@ export default function MatrixSolverPage() {
                             className="w-4 h-4 mt-0.5 text-indigo-600 focus:ring-indigo-500"
                           />
                           <div className="ml-3">
-                            <span className="text-xs font-semibold text-slate-900 block">Cramer's Rule</span>
+                            <span className="text-xs font-semibold text-slate-900 block">Cramer&apos;s Rule</span>
                             <span className="text-[11px] text-slate-500">หาคำตอบด้วยอัตราส่วนดีเทอร์มิแนนต์</span>
                           </div>
                         </label>

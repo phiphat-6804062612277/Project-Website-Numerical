@@ -8,7 +8,6 @@ let clientPromise: Promise<MongoClient> | null = null;
 
 // Extend global namespace for development cache
 declare global {
-  // eslint-disable-next-line no-var
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
@@ -24,7 +23,6 @@ if (uri) {
     clientPromise = client.connect();
   }
 } else {
-  // Graceful log when MONGODB_URI is not set
   if (process.env.NODE_ENV !== 'production') {
     console.warn('[MongoDB] MONGODB_URI is not configured in .env.local. Operating in memory-fallback mode.');
   }
@@ -44,7 +42,7 @@ export async function getDatabase(): Promise<Db | null> {
 }
 
 // In-memory fallback collection for when MongoDB URI is not yet configured
-interface InMemoryRecord {
+export interface InMemoryRecord {
   _id: string;
   dimension: number;
   matrixA: number[][];
@@ -65,7 +63,7 @@ export async function saveProblemToDatabase(doc: {
 }): Promise<string> {
   const db = await getDatabase();
   const id = `rec_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-  const record = {
+  const record: InMemoryRecord = {
     _id: id,
     ...doc,
     createdAt: new Date().toISOString()
@@ -73,15 +71,14 @@ export async function saveProblemToDatabase(doc: {
 
   if (db) {
     try {
-      const collection = db.collection('solved_problems');
-      await collection.insertOne(record as any);
+      const collection = db.collection<InMemoryRecord>('solved_problems');
+      await collection.insertOne(record);
       return id;
     } catch (e) {
       console.warn('[MongoDB] Failed to write to MongoDB, falling back to memory store:', e);
     }
   }
 
-  // Fallback to in-memory store
   inMemoryStore.unshift(record);
   if (inMemoryStore.length > 50) inMemoryStore.pop();
   return id;
@@ -91,7 +88,7 @@ export async function getRecentProblemsFromDatabase(limit: number = 10): Promise
   const db = await getDatabase();
   if (db) {
     try {
-      const collection = db.collection('solved_problems');
+      const collection = db.collection<InMemoryRecord>('solved_problems');
       const docs = await collection
         .find({})
         .sort({ createdAt: -1 })
@@ -118,8 +115,8 @@ export async function getProblemByIdFromDatabase(id: string): Promise<InMemoryRe
   const db = await getDatabase();
   if (db) {
     try {
-      const collection = db.collection('solved_problems');
-      const doc = await collection.findOne({ _id: id as any });
+      const collection = db.collection<InMemoryRecord>('solved_problems');
+      const doc = await collection.findOne({ _id: id });
       if (doc) {
         return {
           _id: doc._id.toString(),
