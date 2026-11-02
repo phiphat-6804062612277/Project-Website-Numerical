@@ -3,11 +3,6 @@ import { LinearSystemProblem } from './LinearSystemProblem';
 import { SolutionResult } from './types';
 import { MatrixUtils } from './MatrixUtils';
 
-/**
- * Concrete Solver: GaussEliminationSolver
- * Inherits from LinearSystemSolver.
- * Implements Forward Elimination to Upper Triangular Form + Backward Substitution.
- */
 export class GaussEliminationSolver extends LinearSystemSolver {
   constructor(problem: LinearSystemProblem) {
     super(problem, 'GAUSS');
@@ -23,10 +18,10 @@ export class GaussEliminationSolver extends LinearSystemSolver {
 
     const aug = MatrixUtils.createAugmentedMatrix(A, b);
     this.logStep(
-      'เมทริกซ์แต่งเติมเริ่มต้น [A | b]',
-      'เตรียมระบบสมการเพื่อทำ Forward Elimination ให้อยู่ในรูปสามเหลี่ยมบน (Upper Triangular Matrix)',
+      'ตั้งเมทริกซ์แต่งเติมเริ่มต้น',
+      'นำเมทริกซ์สัมประสิทธิ์และเวกเตอร์ผลลัพธ์มาเขียนในรูปแบบเมทริกซ์แต่งเติม',
       aug,
-      `[A | b] = ${this.toLaTeXMatrix(aug)}`
+      `[A \\mid b] = ${this.toLaTeXMatrix(aug)}`
     );
 
     if (this.problem.isSingular()) {
@@ -38,13 +33,12 @@ export class GaussEliminationSolver extends LinearSystemSolver {
         answers: [],
         steps: this.steps,
         executionTimeMs: performance.now() - startTime,
-        message: 'ระบบสมการไม่มีคำตอบเอกลักษณ์ (det(A) = 0)'
+        message: 'ระบบสมการไม่มีคำตอบชุดเดียว'
       };
     }
 
-    // --- 1. Forward Elimination ---
+    // Forward Elimination
     for (let i = 0; i < n - 1; i++) {
-      // Partial Pivoting
       let maxRow = i;
       let maxVal = Math.abs(aug[i][i]);
       for (let k = i + 1; k < n; k++) {
@@ -59,15 +53,14 @@ export class GaussEliminationSolver extends LinearSystemSolver {
         aug[i] = aug[maxRow];
         aug[maxRow] = temp;
         this.logStep(
-          `สลับแถว R_${i + 1} \\leftrightarrow R_${maxRow + 1} (Partial Pivoting)`,
-          `สลับแถวเพื่อหลีกเลี่ยงการหารด้วยศูนย์และลด Error`,
+          `สลับแถวที่ ${i + 1} กับแถวที่ ${maxRow + 1}`,
+          `สลับแถวเพื่อให้ค่าสัมประสิทธิ์หลักมีค่ามากที่สุด ช่วยลดความคลาดเคลื่อนในการคำนวณ`,
           aug,
           `R_{${i + 1}} \\leftrightarrow R_{${maxRow + 1}}`,
           'pivot'
         );
       }
 
-      // Eliminate rows below pivot i
       for (let k = i + 1; k < n; k++) {
         const factor = aug[k][i] / aug[i][i];
         if (Math.abs(factor) > 1e-12) {
@@ -75,8 +68,8 @@ export class GaussEliminationSolver extends LinearSystemSolver {
             aug[k][j] -= factor * aug[i][j];
           }
           this.logStep(
-            `กำจัดสมาชิกแถว R_${k + 1}: R_${k + 1} \\leftarrow R_${k + 1} - (${MatrixUtils.cleanNumber(factor, 2)}) R_${i + 1}`,
-            `ทำให้สมาชิกใต้แนวทแยงมุมหลักในคอลัมน์ที่ ${i + 1} กลายเป็น 0`,
+            `กำจัดสมาชิกใต้แนวทแยงในแถวที่ ${k + 1}`,
+            `นำแถวที่ ${k + 1} ลบด้วย ${MatrixUtils.cleanNumber(factor, 2)} เท่าของแถวที่ ${i + 1}`,
             aug,
             `R_{${k + 1}} \\leftarrow R_{${k + 1}} - (${MatrixUtils.cleanNumber(factor, 2)}) R_{${i + 1}}`,
             'eliminate'
@@ -86,13 +79,13 @@ export class GaussEliminationSolver extends LinearSystemSolver {
     }
 
     this.logStep(
-      'ได้เมทริกซ์สามเหลี่ยมบน (Upper Triangular Matrix)',
-      'สิ้นสุดขั้นตอน Forward Elimination พร้อมเข้าสู่ขั้นตอน Backward Substitution',
+      'ได้เมทริกซ์สามเหลี่ยมบน',
+      'สมาชิกใต้แนวทแยงมุมหลักกลายเป็น 0 ทั้งหมด พร้อมเข้าสู่ขั้นตอนการแทนค่าย้อนกลับ',
       aug,
       `U = ${this.toLaTeXMatrix(aug)}`
     );
 
-    // --- 2. Backward Substitution ---
+    // Backward Substitution
     const x = new Array(n).fill(0);
     for (let i = n - 1; i >= 0; i--) {
       let sum = aug[i][n];
@@ -108,8 +101,8 @@ export class GaussEliminationSolver extends LinearSystemSolver {
         : `x_{${i + 1}} = \\frac{${MatrixUtils.cleanNumber(aug[i][n], 2)}}{${MatrixUtils.cleanNumber(aug[i][i], 2)}} = ${x[i]}`;
 
       this.logStep(
-        `แทนค่าย้อนกลับเพื่อหา x_${i + 1} (Backward Substitution)`,
-        `คำนวณตัวแปร x_${i + 1} จากแถวที่ ${i + 1} ของเมทริกซ์สามเหลี่ยมบน`,
+        `แทนค่าย้อนกลับเพื่อหาค่า x_${i + 1}`,
+        `คำนวณหาค่าตัวแปรจากสมการในแถวที่ ${i + 1}`,
         aug,
         formulaText,
         'backsub'

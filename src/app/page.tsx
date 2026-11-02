@@ -15,12 +15,16 @@ import {
   ChevronRight, 
   CheckCircle2, 
   AlertTriangle, 
-  Check, 
-  Share2, 
   Database,
   ArrowRight,
   ArrowLeft
 } from 'lucide-react';
+
+const METHOD_NAMES: Record<SolutionType, string> = {
+  GAUSS_JORDAN: 'Gauss-Jordan',
+  GAUSS: 'Gauss Elimination',
+  CRAMER: 'Cramer',
+};
 
 export default function MatrixSolverPage() {
   const [activeTab, setActiveTab] = useState<'solver' | 'history'>('solver');
@@ -39,7 +43,6 @@ export default function MatrixSolverPage() {
   // Solution state
   const [result, setResult] = useState<SolutionResult | null>(null);
   const [activeStepIdx, setActiveStepIdx] = useState<number>(0);
-  const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [historyList, setHistoryList] = useState<any[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(false);
 
@@ -167,15 +170,6 @@ export default function MatrixSolverPage() {
     }
     setMatrixA(newA);
     setVectorB(newB);
-  };
-
-  // Copy shareable link
-  const handleShareLink = () => {
-    const shareData = btoa(JSON.stringify({ A: matrixA, b: vectorB, m: selectedMethod }));
-    const url = `${window.location.origin}${window.location.pathname}?state=${shareData}`;
-    navigator.clipboard.writeText(url);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2500);
   };
 
   // Determinant calculation preview
@@ -310,15 +304,15 @@ export default function MatrixSolverPage() {
                   {/* Matrix Inputs */}
                   <div className="lg:col-span-7 bg-slate-50 border border-slate-200 rounded-2xl p-5 shadow-2xs">
                     <div className="flex items-center justify-between mb-4 border-b border-slate-200 pb-2.5">
-                      <span className="text-[11px] font-semibold text-slate-500 font-mono tracking-wider uppercase">
-                        [ สัมประสิทธิ์ A ] × [ ตัวแปร x ] = [ เวกเตอร์ b ]
+                      <span className="text-[11px] font-semibold text-slate-500 font-mono tracking-wider">
+                        เมทริกซ์สัมประสิทธิ์ A × ตัวแปร x = เวกเตอร์ b
                       </span>
                       <span className={`text-[11px] font-mono px-2 py-0.5 rounded border ${
                         isSingular 
                           ? 'bg-rose-50 border-rose-200 text-rose-700 font-semibold' 
                           : 'bg-white border-slate-200 text-slate-700 shadow-2xs'
                       }`}>
-                        {isSingular ? 'det(A) = 0 (Singular)' : `det(A) = ${detPreview.toFixed(2)}`}
+                        {isSingular ? 'det(A) = 0' : `det(A) = ${detPreview.toFixed(2)}`}
                       </span>
                     </div>
 
@@ -356,8 +350,8 @@ export default function MatrixSolverPage() {
                   {/* Method Options & Solve Button */}
                   <div className="lg:col-span-5 space-y-4">
                     <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3 shadow-2xs">
-                      <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                        เลือกวิธีคำนวณ (Numerical Method):
+                      <label className="block text-xs font-semibold text-slate-700 tracking-wider">
+                        เลือกวิธีคำนวณ
                       </label>
 
                       <div className="space-y-2">
@@ -379,7 +373,7 @@ export default function MatrixSolverPage() {
                           />
                           <div className="ml-3">
                             <span className="text-xs font-semibold text-slate-900 block">Gauss-Jordan Elimination</span>
-                            <span className="text-[11px] text-slate-500">แปลงสู่ Reduced Row Echelon Form (RREF)</span>
+                            <span className="text-[11px] text-slate-500">แปลงเป็นเมทริกซ์ลดรูปขั้นบันไดแถว</span>
                           </div>
                         </label>
 
@@ -401,7 +395,7 @@ export default function MatrixSolverPage() {
                           />
                           <div className="ml-3">
                             <span className="text-xs font-semibold text-slate-900 block">Gauss Elimination</span>
-                            <span className="text-[11px] text-slate-500">สามเหลี่ยมบน + แทนค่าย้อนกลับ (Back-substitution)</span>
+                            <span className="text-[11px] text-slate-500">แปลงเป็นเมทริกซ์สามเหลี่ยมบนแล้วแทนค่าย้อนกลับ</span>
                           </div>
                         </label>
 
@@ -423,7 +417,7 @@ export default function MatrixSolverPage() {
                           />
                           <div className="ml-3">
                             <span className="text-xs font-semibold text-slate-900 block">Cramer's Rule</span>
-                            <span className="text-[11px] text-slate-500">อัตราส่วน Determinant: x_i = det(A_i) / det(A)</span>
+                            <span className="text-[11px] text-slate-500">หาคำตอบด้วยอัตราส่วนดีเทอร์มิแนนต์</span>
                           </div>
                         </label>
                       </div>
@@ -434,7 +428,7 @@ export default function MatrixSolverPage() {
                       className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white text-xs font-semibold rounded-2xl shadow-md shadow-indigo-100 transition flex items-center justify-center gap-2 transform active:scale-[0.99]"
                     >
                       <Sparkles className="w-4 h-4" />
-                      <span>คำนวณและแสดงขั้นตอนวิธีทำ (Solve)</span>
+                      <span>คำนวณและแสดงขั้นตอนวิธีทำ</span>
                     </button>
                   </div>
 
@@ -463,7 +457,7 @@ export default function MatrixSolverPage() {
                   </button>
 
                   <div className="text-xs text-slate-500 font-mono">
-                    มิติ: <span className="font-semibold text-slate-800">{dimension}×{dimension}</span> • วิธี: <span className="font-semibold text-indigo-600">{result.solverType}</span> • เวลา: <span className="font-semibold text-slate-800">{result.executionTimeMs?.toFixed(2)} ms</span>
+                    มิติ <span className="font-semibold text-slate-800">{dimension}×{dimension}</span> • วิธี <span className="font-semibold text-indigo-600">{METHOD_NAMES[result.solverType]}</span> • เวลา <span className="font-semibold text-slate-800">{result.executionTimeMs?.toFixed(2)} ms</span>
                   </div>
                 </div>
 
@@ -481,9 +475,9 @@ export default function MatrixSolverPage() {
                         {result.isSingular ? <AlertTriangle className="w-5 h-5" /> : <CheckCircle2 className="w-5 h-5" />}
                       </div>
                       <div>
-                        <h3 className="text-sm font-bold text-slate-900">คำตอบของระบบสมการ (Solutions)</h3>
+                        <h3 className="text-sm font-bold text-slate-900">คำตอบของระบบสมการ</h3>
                         <p className="text-[11px] text-slate-500">
-                          {result.isSingular ? 'ระบบสมการนี้ไม่สามารถหาคำตอบเดียวได้' : 'คำตอบของตัวแปรทั้งหมด'}
+                          {result.isSingular ? 'ระบบสมการนี้ไม่มีคำตอบชุดเดียว' : 'คำตอบของตัวแปรทั้งหมด'}
                         </p>
                       </div>
                     </div>
@@ -491,7 +485,7 @@ export default function MatrixSolverPage() {
                     <div className="flex flex-wrap items-center gap-2">
                       {result.isSingular ? (
                         <div className="px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
-                          ⚠️ ระบบสมการไม่มีคำตอบเอกลักษณ์ (Determinant = 0)
+                          ระบบสมการไม่มีคำตอบชุดเดียว ดีเทอร์มิแนนต์เท่ากับ 0
                         </div>
                       ) : (
                         result.answers.map((ans, idx) => (
@@ -504,15 +498,6 @@ export default function MatrixSolverPage() {
                           </div>
                         ))
                       )}
-
-                      <button
-                        onClick={handleShareLink}
-                        className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs flex items-center gap-1.5 transition ml-2 shadow-2xs"
-                        title="คัดลอกลิงก์แชร์โจทย์"
-                      >
-                        {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
-                        <span>{copiedLink ? 'คัดลอกแล้ว!' : 'แชร์ลิงก์'}</span>
-                      </button>
                     </div>
                   </div>
 
@@ -521,8 +506,8 @@ export default function MatrixSolverPage() {
                     
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider font-mono">
-                          🔍 ขั้นตอนวิธีทำ (Step-by-Step Walkthrough)
+                        <span className="text-xs font-bold text-indigo-700 tracking-wider">
+                          ขั้นตอนวิธีทำ
                         </span>
                         <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-white border border-slate-200 text-slate-600 shadow-2xs">
                           ขั้นตอนที่ {activeStepIdx + 1} / {result.steps.length}
@@ -637,7 +622,7 @@ export default function MatrixSolverPage() {
                   <Database className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-slate-900">ประวัติการคำนวณที่บันทึก (MongoDB Database)</h2>
+                  <h2 className="text-base font-bold text-slate-900">ประวัติการคำนวณ</h2>
                   <p className="text-xs text-slate-500">รายการโจทย์ที่เคยคำนวณ คลิกเพื่อโหลดกลับมาดูผลลัพธ์ได้ทันที</p>
                 </div>
               </div>
@@ -650,10 +635,10 @@ export default function MatrixSolverPage() {
             </div>
 
             {isLoadingHistory ? (
-              <div className="text-center py-10 text-xs text-slate-400">กำลังโหลดข้อมูลจากฐานข้อมูล...</div>
+              <div className="text-center py-10 text-xs text-slate-400">กำลังโหลดข้อมูล...</div>
             ) : historyList.length === 0 ? (
               <div className="text-center py-10 text-xs text-slate-400">
-                ยังไม่มีประวัติการคำนวณในระบบ ลองกด "คำนวณ" ในหน้าแรกเพื่อบันทึกรายการแรก
+                ยังไม่มีประวัติการคำนวณในระบบ
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -674,7 +659,7 @@ export default function MatrixSolverPage() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-mono font-semibold text-indigo-600">
-                        ขนาด {item.dimension}×{item.dimension} • {item.method}
+                        ขนาด {item.dimension}×{item.dimension} • {METHOD_NAMES[item.method as SolutionType] || item.method}
                       </span>
                       <span className="text-[10px] text-slate-400">
                         {new Date(item.createdAt).toLocaleTimeString('th-TH')}
@@ -706,7 +691,6 @@ export default function MatrixSolverPage() {
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500">
         <p>Linear System • วิชา 040613204 Object-Oriented Programming (KMUTNB)</p>
-        <p className="text-[11px] text-slate-400 mt-1">Full-Stack Web App: Next.js • TypeScript • Tailwind CSS • MongoDB • Vercel</p>
       </footer>
 
     </div>
