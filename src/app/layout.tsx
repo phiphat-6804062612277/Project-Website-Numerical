@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import 'katex/dist/katex.min.css';
 
 export const metadata: Metadata = {
   title: 'Linear System - Matrix Solver',
@@ -14,6 +13,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="th" className="light">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+        />
+      </head>
       <body className="bg-slate-50 text-slate-900 min-h-screen antialiased selection:bg-indigo-600 selection:text-white">
         {children}
       </body>
